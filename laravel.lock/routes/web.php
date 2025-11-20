@@ -1,17 +1,25 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Routing\Route as RoutingRoute;
 use Symfony\Component\Routing\Router;
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     // dump('hello');
     // dump(config('database.connections.mysql'));
     dump(config('custom.custom_test', 'var not exist'));
     dump(config('custom.custom_test_env'));
     return view('welcome');
-});
+}); */
+
+// ----Video 5----
+Route::get('/', [MainController::class, 'index']);
+// ---------------
+
+// ----Video 3----
 
 Route::get('/v3', function () {
     // $cache = app()->make('cache');
@@ -83,3 +91,35 @@ Route::any('/anyMethods', function() {
 })->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::redirect('/here', '/posts/777');
+
+// ----Video 5----
+
+/*
+Route::get('/admin', function() {
+    return "Admin main page";
+});
+Route::get('/admin/posts', function() {
+    return "Admin posts page";
+});
+Route::get('/admin/posts/{id}', function($id) {
+    return "Admin post {$id}";
+});
+*/
+
+Route::prefix('admin')->group(function() {
+    Route::get('/', function() {
+        return "Admin main page";
+    });
+    Route::get('/posts', function() {
+        return "Admin posts page";
+    });
+    Route::get('/posts/{id}', function($id) {
+        return "Admin post {$id}";
+    });
+});
+
+/* Route::fallback(function() {
+    abort(404, '404 - Page not found!!!'); // see resources/views/errors/404.blade.php
+    return response()->json(['answer' => '404 - Page not found'], 404);
+    return response('404 - Page not found', 404);
+}); */
